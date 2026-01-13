@@ -44,6 +44,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    protected $table = 'users';
     public function aiKeys()
     {
         return $this->hasMany(UserAiKey::class);
