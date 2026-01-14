@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserAiKey extends Model
 {
+    protected $table = 'user_ai_keys';
     protected $fillable = [
         'user_id', 'ai_provider_id', 'api_key_encrypted',
         'api_key_last4', 'is_active', 'quota_limit', 'expires_at'

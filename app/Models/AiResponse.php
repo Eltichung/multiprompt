@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AiResponse extends Model
 {
+    protected $table = 'ai_responses';
     protected $fillable = [
         'prompt_id', 'ai_provider_id', 'user_ai_key_id',
         'response_text', 'latency_ms', 'status', 'error_message'
