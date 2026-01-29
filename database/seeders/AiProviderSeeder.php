@@ -34,5 +34,25 @@ class AiProviderSeeder extends Seeder
             'is_active' => true,
             'timeout_sec' => 30,
         ]);
+        AiProvider::create([
+            'code' => 'gemini',
+            'name' => 'Anthropic gemini',
+            'base_url' => 'https://generativelanguage.googleapis.com/v1/models/',
+            'system_api_key_encrypted' => null,
+            'system_api_key_last4' => null,
+            'allow_system_key' => true,
+            'is_active' => true,
+            'timeout_sec' => 30,
+        ]);
+        AiProvider::create([
+            'code' => 'OpenRouter',
+            'name' => 'OpenRouter',
+            'base_url' => 'https://openrouter.ai/v1/',
+            'system_api_key_encrypted' => null,
+            'system_api_key_last4' => null,
+            'allow_system_key' => true,
+            'is_active' => true,
+            'timeout_sec' => 30,
+        ]);
     }
 }
