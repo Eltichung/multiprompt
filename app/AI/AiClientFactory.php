@@ -26,9 +26,9 @@ class AiClientFactory
                 ),
             };
 
-        } catch (\Throwable $e) {
-            dump($e->getMessage());
-            throw $e;
+        } catch (\Exception $e) {
+          Log::error("[callAIByProvider] Exception {$e->getMessage()}, on file {$e->getFile()}, on line {$e->getLine()}");
+          throw $e;
         }
     }
 }

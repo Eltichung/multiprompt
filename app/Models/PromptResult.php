@@ -22,8 +22,11 @@ class PromptResult extends Model
     }
     public static function getLatestByPrompt(int $promptId)
     {
-        return self::where('prompt_id', $promptId)
-            ->orderByDesc('id')
-            ->first();
+      return self::where('prompt_id', $promptId)
+        ->orderByDesc('id')
+        ->get()
+        ->groupBy('ai_provider_id')
+        ->map(fn($group) => $group->first());
     }
+
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Service\ChatService;
 use App\Models\AiProvider;
 use App\Models\Prompt;
+use App\Models\PromptMessage;
+use App\Models\PromptResult;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -15,49 +18,59 @@ class ChatController extends Controller
 {
   public function index()
   {
+
     return view('chat.index', [
       'dataListAIProvider' => AiProvider::getListAIProvider(),
-      'dataListPromptHistories' => collect()
+      'dataListPromptHistories' => collect(),
+      'dataUser' => User::findOrFail(Auth::id())
+
     ]);
   }
-  public function getData(Request $request)
+  public function getDataChatHistories(Request $request)
   {
     $dataListPromptHistories = collect();
-    $dataListPromptHistories = ChatService::getChatHistories(1);
-//    if ($request->ajax()) {
-//      $userId = Auth::id();
-//
-//      if (!$userId) {
-//        return response()->json([
-//          'success' => false,
-//          'message' => 'Unauthenticated'
-//        ], 401);
-//      }
-//         $dataListPromptHistories = ChatService::getChatHistories($userId);
-//    }
+    if ($request->ajax()) {
+      $userId = Auth::id();
+
+      if (!$userId) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Unauthenticated'
+        ], 401);
+      }
+         $dataListPromptHistories = ChatService::getChatHistories($userId);
+    }
 
     return response()->json([
       'success' => true,
-      'dataListPromptHistories' => $dataListPromptHistories,
+      'data' => $dataListPromptHistories,
     ]);
   }
-  public function sendMessage(Request $request)
-  {
-    $userId = Auth::id();
-
-    Prompt::create([
-      'user_id' => $userId,
-      'content' => $request->message,
+  public function getDataPrompt(Request $request){
+    $dataRequest= $request->only(['prompt_id']);
+    $validatorData = Validator::make($dataRequest, [
+      'prompt_id' => 'required|int',
     ]);
-
-    // ❌ Xoá cache cũ
-    Cache::forget("chat_histories_user_{$userId}");
-
-    // ✅ (Optional) tạo cache mới luôn
-    ChatService::getChatHistories($userId);
+    if ($validatorData->fails()) {
+          return  response()->json([
+              'message' => 'Prompt_id is required',
+          ]);
+      }
+    $data = PromptMessage::getPromptMessageByID($dataRequest['prompt_id']);
+    $dataPromptResults = PromptResult::getLatestByPrompt($dataRequest['prompt_id']);
+    foreach ($data as $providerId => $messages) {
+      foreach ($dataPromptResults as $dataPromptResult) {
+        if ($dataPromptResult['ai_provider_id'] == $messages[0]['ai_provider_id']) {
+          $messages[0]['latest_result'] = $dataPromptResult;
+          break;
+        }
+      }
+    }
 
     return response()->json([
-      'success' => true
+      'success' => true,
+      'data' => $data,
     ]);
+
   }
 }

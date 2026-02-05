@@ -30,7 +30,6 @@ class OpenAiClient implements AiClientInterface
                 ],
             ];
         }
-       dump($contents);
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->apiKey,
             'Content-Type'  => 'application/json',
@@ -41,7 +40,7 @@ class OpenAiClient implements AiClientInterface
                 'input' => $contents,
                 'store' => true,
             ]);
-        dump($response->body());
+
         if ($response->failed()) {
             Log::error('Open AI API error', [
                 'status' => $response->status(),

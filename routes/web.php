@@ -6,11 +6,9 @@ use App\Http\Controllers\PromptController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-  return redirect(route('dashboard'));
+  return redirect(route('chat'));
 });
-Route::get('/chat', function () {
-  return view('chat');
-});
+
 Route::middleware('guest')->group(function () {
   Route::get('/login/', function () {
     return view('auth.login');
@@ -21,15 +19,13 @@ Route::middleware('guest')->group(function () {
     return view('auth.register');
   })->name('admin.view.register');
 });
-Route::get('/chat', [ChatController::class, 'index']);
-Route::post('/chat/data', [ChatController::class, 'getData'])->name('get.data.chat');
+
 
 Route::middleware('auth')->group(function () {
+  Route::get('/chat', [ChatController::class, 'index'])->name('chat');
+  Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+  Route::post('/chat/data-histories', [ChatController::class, 'getDataChatHistories'])->name('get.data.chat.histories');
+  Route::post('/chat/data-prompt', [ChatController::class, 'getDataPrompt'])->name('get.data.prompt');
+  Route::post('/chat/send-message', [PromptController::class, 'submit'])->name('chat.send.message');
 
-
-
-  Route::get('/dashboard', function () {
-    return view('dashboard');
-  })->name('dashboard');
-  Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');;
 });

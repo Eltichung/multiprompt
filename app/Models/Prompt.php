@@ -9,7 +9,7 @@ class Prompt extends Model
 {
   protected $table = 'prompts';
   protected $fillable = [
-    'user_id', 'content'
+    'user_id', 'content','status'
   ];
 
   public function user()

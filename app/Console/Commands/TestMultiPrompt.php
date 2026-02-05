@@ -39,9 +39,9 @@ class TestMultiPrompt extends Command
             'POST',
             [
                 'user_id' => $user->id,
-                'prompt' => 'dịch sang tiếng anh',
+                'prompt' => 'dịch sang tiếng nhật',
                 'providers' => ['openai','gemini'],
-                 'prompt_id' => 135,
+                 'prompt_id' => 136,
                 'ai_provider_id' => 2// provider ID có sẵn
             ]
         );

@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Send message functionality
-    const sendBtn = document.querySelector('.send-btn');
     const messageInput = document.querySelector('.message-input');
     const messagesArea = document.querySelector('.messages-area');
 
@@ -60,10 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000);
     }
 
-    // Send on button click
-    if (sendBtn) {
-        sendBtn.addEventListener('click', sendMessage);
-    }
 
     // Send on Enter key
     if (messageInput) {
@@ -151,38 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // New chat button
-    const newChatBtn = document.querySelector('.new-chat-btn');
-    if (newChatBtn) {
-        newChatBtn.addEventListener('click', function() {
-            if (confirm('Bạn có muốn bắt đầu cuộc trò chuyện mới?')) {
-                // In real app, this would clear messages and start fresh
-                messagesArea.innerHTML = '';
-                showNotification('Đã tạo cuộc trò chuyện mới!');
-            }
-        });
-    }
-
-    // Chat item click handler
-    const chatItems = document.querySelectorAll('.chat-item');
-    chatItems.forEach(item => {
-        item.addEventListener('click', function() {
-            chatItems.forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-
-            // Update chat title
-            const chatTitle = document.querySelector('.chat-title');
-            if (chatTitle) {
-                chatTitle.textContent = this.textContent;
-            }
-
-            // Close sidebar on mobile
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('open');
-                body.classList.remove('sidebar-open');
-            }
-        });
-    });
 
     // Voice input button
     const voiceBtn = document.querySelector('.voice-btn');
